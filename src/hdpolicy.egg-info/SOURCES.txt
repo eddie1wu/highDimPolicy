@@ -1,0 +1,5 @@
+pyproject.toml
+src/hdpolicy.egg-info/PKG-INFO
+src/hdpolicy.egg-info/SOURCES.txt
+src/hdpolicy.egg-info/dependency_links.txt
+src/hdpolicy.egg-info/top_level.txt
