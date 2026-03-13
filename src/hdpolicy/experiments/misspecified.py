@@ -95,7 +95,7 @@ def run_rep(cfg: Config, rep: int = 0):
 
 
     ### Use the true DGP, but limited sample
-    n_main, n_pair, n_triple, n_quad, max_power = 6, 6, 4, 3, 3
+    n_main, n_pair, n_triple, n_quad, max_power = 5, 6, 2, 1, 2
     (all_pairs, powers, all_triplets, all_quads) = true_form
     X_true = []
 

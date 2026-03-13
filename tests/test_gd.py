@@ -9,7 +9,7 @@ from hdpolicy.linear_classifier import gd
 def main():
 
     # Generate data
-    n, n_dim = 500, 20
+    n, n_dim = 500, 10
     rng = make_rng(123)
     beta = rng.normal(0, 1, size = n_dim).reshape(-1, 1)
     X, y, _ = gen_logistic(n, n_dim, rng, beta)
@@ -32,10 +32,11 @@ def main():
 
     print(f"True param: \n {beta}")
     print(f"Fitted param: \n {beta_hat}")
-    print(f"Distance between true and fitted: \n {np.abs(beta - beta_hat)}")
+    print(f"Distance between true and fitted: \n {np.linalg.norm(beta - beta_hat, ord = 1) / n_dim}")
 
     print("Finished")
 
 
 if __name__ == '__main__':
     main()
+

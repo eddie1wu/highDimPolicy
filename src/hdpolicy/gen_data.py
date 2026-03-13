@@ -38,7 +38,8 @@ def gen_nonlinear(n, rct_prob, rng, dgp):
     Y0 = rng.normal(0, 1, size = (n, 1))
 
     if dgp == 'poly_interactions':
-        n_main, n_pair, n_triple, n_quad, max_power = 6, 6, 4, 3, 3
+        # n_main, n_pair, n_triple, n_quad, max_power = 6, 6, 4, 3, 3
+        n_main, n_pair, n_triple, n_quad, max_power = 5, 6, 2, 1, 2
         X = rng.normal(0, 1, size = (n, n_main))
         tau = 0
 
