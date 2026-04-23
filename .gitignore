@@ -9,3 +9,7 @@ __pycache__/
 # OS
 .DS_Store
 
+# Results and graphs
+results/
+*.png
+

@@ -1,9 +1,12 @@
 from __future__ import annotations
 from pathlib import Path
+
 import pickle
+import tomllib
 import json
 from datetime import datetime
-from dataclasses import asdict
+
+from types import SimpleNamespace
 
 
 def make_run_dir(results_root: Path, tag: str | None = None) -> Path:
@@ -23,10 +26,10 @@ def save_results(run_dir: Path, results: dict) -> None:
 
 
 
-def save_config(run_dir: Path, cfg) -> None:
-    path = run_dir / "config.json"
-    with open(path, "w") as f:
-        json.dump(asdict(cfg), f, indent = 2)
+# def save_config(run_dir: Path, cfg) -> None:
+#     path = run_dir / "config.json"
+#     with open(path, "w") as f:
+#         json.dump(asdict(cfg), f, indent = 2)
 
 
 
@@ -36,10 +39,25 @@ def load_results(run_dir: Path) -> dict:
         return pickle.load(f)
 
 
+#
+# def load_config(run_dir: Path):
+#     path = run_dir / "config.json"
+#     with open(path, "r") as f:
+#         return json.load(f)
 
-def load_config(run_dir: Path):
-    path = run_dir / "config.json"
-    with open(path, "r") as f:
-        return json.load(f)
 
+
+def load_config(path):
+
+    with open(path, "rb") as f:
+        d = tomllib.load(f)
+
+    return SimpleNamespace(**d)
+
+
+def save_config(path, config):
+    path = path / "config.json"
+
+    with open(path, "w") as f:
+        json.dump(vars(config), f, indent = 2)
 

@@ -1,0 +1,16 @@
+
+# DGP parameters
+seed = 31415
+n_train = 150
+n_test = 5000
+n_val = 50
+X_dim_max = 50
+dim_max = 300
+rct_probability = 0.5
+
+# Simulation param
+n_rep = 25
+lr = 0.01
+steps = 100000
+
+

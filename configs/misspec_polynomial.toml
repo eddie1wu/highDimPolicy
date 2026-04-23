@@ -1,0 +1,15 @@
+
+# DGP param
+seed = 1
+n_train = 100
+n_test = 5000
+X_dim_max = 3
+dim_max = 1200
+rct_probability = 0.5
+
+# Simulation param
+poly_degree = 18
+n_rep = 56
+lr = 0.5
+steps = 300000
+

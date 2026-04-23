@@ -5,8 +5,11 @@ class Config:
     seed: int = 369
 
     dim_max: int = 300
+
     n_train: int = 150
-    n_test: int = 300
+
+    # n_train: int = 150
+    n_test: int = 500
     n_rep: int = 200
 
     rct_probability: float = 0.5

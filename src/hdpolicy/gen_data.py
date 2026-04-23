@@ -15,6 +15,7 @@ def gen_logistic(n, n_dim, rng, beta = None):
     return X, y, beta
 
 
+
 def gen_rct(n, n_dim, rct_prob, rng,  beta_0 = None, beta_1 = None):
     if beta_0 is None:
         beta_0 = rng.normal(-1, 2, size = (n_dim, 1))
@@ -29,7 +30,83 @@ def gen_rct(n, n_dim, rct_prob, rng,  beta_0 = None, beta_1 = None):
     D = rng.choice([1, -1], size=(n, 1), p=[rct_prob, 1-rct_prob])
     Y = ( (1+D)/2 ) * Y1 + ( (1-D)/2 ) * Y0
 
-    return Y, X, D, Y0, Y1
+    tau = X @ (beta_1 - beta_0)
+
+    return Y, X, D, Y0, Y1, tau
+
+
+
+def gen_polynomial(n, dim_X, rct_prob, rng, noise_std=1.0):
+
+    X = rng.normal(0, 1, size = (n, dim_X))
+    tau = np.sum(X + X**2, axis = 1, keepdims = True)
+
+    # baseline outcome level
+    base = 0.5 * np.sum(X, axis = 1, keepdims = True)
+
+    eps0 = noise_std * rng.normal(size=(n, 1))
+    eps1 = noise_std * rng.normal(size=(n, 1))
+
+    Y0 = base - 0.5 * tau + eps0
+    Y1 = base + 0.5 * tau + eps1
+
+    D = rng.choice([-1, 1], size = (n, 1), p = [1-rct_prob, rct_prob])
+    Y = (D + 1) / 2 * Y1 + (1 - D) / 2  * Y0
+
+    return Y, X, D, Y0, Y1, tau
+
+
+
+def gen_constant_signal(
+        n,
+        dim_X,
+        rct_prob,
+        rng,
+        tau_norm = 3.0,
+        mu_scale = 1.0,
+        noise_std = 0.1,
+        corr_X = False,
+        n_factors = 10
+):
+    # Define feature
+    if corr_X:
+        n_factors = n_factors
+        F = rng.normal(0, 1, size=(n, n_factors))
+        B = rng.normal(0, 1 / np.sqrt(n_factors), size=(n_factors, dim_X))
+        epsilon = rng.normal(0, 0.5, size=(n, dim_X))
+        X = F @ B + epsilon
+    else:
+        X = rng.normal(0, 1, size = (n, dim_X))
+
+    # baseline component
+    mu = mu_scale * rng.normal(0, 0.5, size=(dim_X, 1))
+
+    # treatment effect direction (normalized)
+    delta = rng.normal(1, 0.5, size=(dim_X, 1))
+    delta = tau_norm * delta / np.linalg.norm(delta)
+
+    # construct beta_0 and beta_1
+    beta_0 = mu - 0.5 * delta
+    beta_1 = mu + 0.5 * delta
+
+    # potential outcomes
+    eps0 = noise_std * rng.normal(size=(n, 1))
+    eps1 = noise_std * rng.normal(size=(n, 1))
+
+    Y0 = X @ beta_0 + eps0
+    Y1 = X @ beta_1 + eps1
+
+    # treatment assignment in {-1, +1}
+    D = rng.choice([-1, 1], size=(n, 1), p=[1 - rct_prob, rct_prob])
+
+    # observed outcome
+    Y = ((D + 1) / 2) * Y1 + ((1 - D) / 2) * Y0
+
+    # true CATE
+    tau = X @ delta
+
+    return Y, X, D, Y0, Y1, tau
+
 
 
 def gen_nonlinear(n, rct_prob, rng, dgp):
