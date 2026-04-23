@@ -9,6 +9,9 @@ __pycache__/
 # OS
 .DS_Store
 
+# Rhistory
+.Rhistory
+
 # Results and graphs
 results/
 *.png
